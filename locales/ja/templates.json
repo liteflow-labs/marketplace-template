@@ -1,0 +1,10 @@
+{
+  "categories": {
+    "Category": "カテゴリー",
+    "Art": "芸術",
+    "Photography": "写真術",
+    "Currency": "通貨",
+    "DeFi": "DeFi",
+    "Games": "ゲーム"
+  }
+}

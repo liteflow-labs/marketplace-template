@@ -1,0 +1,10 @@
+{
+  "categories": {
+    "Category": "类别",
+    "Art": "艺术",
+    "Photography": "摄影",
+    "Currency": "货币",
+    "DeFi": "DeFi",
+    "Games": "游戏"
+  }
+}
