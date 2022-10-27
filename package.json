@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.0",
     "@chakra-ui/react": "^1.8.8",
+    "@nft/chat": "^0.1.5",
     "@nft/components": "^1.0.0-beta.5",
     "@nft/email-connector": "^1.0.0-beta.5",
     "@nft/templates": "^1.0.0-beta.5",
@@ -30,19 +31,19 @@
     "ts-invariant": "^0.9.4"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.28.0",
-    "@typescript-eslint/parser": "^4.31.1",
     "@next/bundle-analyzer": "^11.0.1",
     "@types/nprogress": "^0.2.0",
     "@types/react": "^17.0.11",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.31.1",
     "eslint": "^7.29.0",
-    "prettier": "^2.3.2",
-    "prettier-plugin-organize-imports": "^2.3.4",
     "eslint-config-next": "^11.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-deprecation": "^1.2.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.1.4",
+    "prettier": "^2.3.2",
+    "prettier-plugin-organize-imports": "^2.3.4",
     "typescript": "^4.3.4"
   }
 }

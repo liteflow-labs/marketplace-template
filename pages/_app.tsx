@@ -15,6 +15,7 @@ import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { useEffect, useMemo } from "react";
+import ChatWindow from "../components/ChatWindow";
 import Head from "../components/Head";
 import environment from "../environment";
 import { theme } from "../styles/theme";
@@ -149,7 +150,7 @@ function MyApp({
         bugsnagAPIKey={environment.BUGSNAG_API_KEY}
         theme={theme}
       >
-        <div>
+        <ChatWindow>
           <Navbar
             allowTopUp={true}
             router={{
@@ -178,7 +179,7 @@ function MyApp({
           />
           <Component {...pageProps} />
           <Footer name="Liteflow" links={footerLinks} />
-        </div>
+        </ChatWindow>
       </LiteflowNFTApp>
     </>
   );
