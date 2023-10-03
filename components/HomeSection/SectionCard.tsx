@@ -1,22 +1,28 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { AspectRatio, Box, Flex, Heading, Text } from '@chakra-ui/react'
 import { FC } from 'react'
 import Image from '../Image/Image'
 import Link from '../Link/Link'
 
 export type Props = {
   description?: string
+  descriptionIsTruncated?: boolean
   href: string
   isExternal?: boolean
   image?: string
+  imageRatio?: number
   title: string
+  titleIsTruncated?: boolean
 }
 
 const HomeSectionCard: FC<Props> = ({
   description,
+  descriptionIsTruncated,
   href,
   isExternal,
   image,
+  imageRatio,
   title,
+  titleIsTruncated,
 }) => {
   return (
     <Link href={href} isExternal={isExternal} w="full">
@@ -26,9 +32,10 @@ const HomeSectionCard: FC<Props> = ({
         borderColor="gray.200"
         shadow="sm"
         w="full"
+        h="full"
         overflow="hidden"
       >
-        <Box position="relative" height="7.5rem">
+        <AspectRatio ratio={imageRatio || 16 / 9}>
           {image ? (
             <Image
               src={image}
@@ -43,7 +50,7 @@ const HomeSectionCard: FC<Props> = ({
           ) : (
             <Box bg="gray.200" height="full" />
           )}
-        </Box>
+        </AspectRatio>
         <Flex
           direction="column"
           justify="center"
@@ -51,7 +58,12 @@ const HomeSectionCard: FC<Props> = ({
           p={4}
           gap={1}
         >
-          <Heading as="h3" variant="heading2" title={title} isTruncated>
+          <Heading
+            as="h3"
+            variant="heading2"
+            title={title}
+            isTruncated={titleIsTruncated ? true : false}
+          >
             {title}
           </Heading>
           {description && (
@@ -59,7 +71,7 @@ const HomeSectionCard: FC<Props> = ({
               variant="subtitle2"
               color="gray.500"
               title={description}
-              noOfLines={2}
+              noOfLines={descriptionIsTruncated ? 2 : undefined}
             >
               {description}
             </Text>

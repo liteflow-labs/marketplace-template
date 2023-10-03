@@ -168,42 +168,6 @@ query FetchCollectionAssets(
           }
         }
       }
-      sales(
-        first: 1
-        orderBy: [UNIT_PRICE_IN_REF_ASC, CREATED_AT_ASC]
-        filter: { expiredAt: { greaterThan: $now } } # This filter should also be applied to the root query if sorting by sales. See getExtraFilterForSort function in utils/post/sorting.ts
-      ) {
-        nodes {
-          id
-          unitPrice
-          currency {
-            id
-            image
-            symbol
-            decimals
-          }
-          maker {
-            address
-          }
-        }
-      }
-      bids(
-        first: 1
-        orderBy: [UNIT_PRICE_IN_REF_ASC, CREATED_AT_ASC]
-        filter: { expiredAt: { greaterThan: $now } } # This filter should also be applied to the root query if sorting on by bids
-      ) {
-        nodes {
-          id
-          unitPrice
-          amount
-          currency {
-            image
-            id
-            decimals
-            symbol
-          }
-        }
-      }
     }
   }
 }

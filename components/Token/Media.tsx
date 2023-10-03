@@ -1,79 +1,44 @@
-import {
-  Box,
-  Center,
-  chakra,
-  Icon,
-  Stack,
-  Text,
-  useTheme,
-} from '@chakra-ui/react'
+import { Box, Center, Icon, Stack, Text, useTheme } from '@chakra-ui/react'
 import { FaImage } from '@react-icons/all-files/fa/FaImage'
 import { FC, useCallback, useEffect, useState } from 'react'
+import { FileResult } from '../../hooks/useDetectAssetMedia'
 import Image from '../Image/Image'
 
-const getUnlockedContentUrls = (
-  unlockedContent:
-    | {
-        url: string
-        mimetype: string | null
-      }
-    | null
-    | undefined,
-  imageUrl: string,
-  animationUrl: string | null | undefined,
-): { image: string; animation: string | null } => {
-  if (unlockedContent) {
-    return {
-      image: unlockedContent.url,
-      animation: unlockedContent.mimetype?.startsWith('video/')
-        ? unlockedContent.url
-        : null,
-    }
-  }
-  return {
-    image: imageUrl,
-    animation: animationUrl || null,
-  }
-}
-
 const TokenMedia: FC<{
-  imageUrl: string
-  animationUrl: string | null | undefined
-  unlockedContent: { url: string; mimetype: string | null } | null | undefined
+  media: FileResult
+  fallback: FileResult | null
   defaultText: string
   controls?: boolean
   fill?: boolean
   sizes: string
-}> = ({
-  imageUrl,
-  animationUrl,
-  unlockedContent,
-  defaultText,
-  fill,
-  controls,
-  sizes,
-}) => {
+}> = ({ media, fallback, defaultText, fill, controls, sizes }) => {
   const { colors } = useTheme()
-
-  // prioritize unlockedContent
-  const { image, animation } = getUnlockedContentUrls(
-    unlockedContent,
-    imageUrl,
-    animationUrl,
-  )
 
   const [imageError, setImageError] = useState(false)
   const [videoError, setVideoError] = useState(false)
+  const [mediaToDisplay, setMediaToDisplay] = useState<FileResult | null>(media)
 
   const onImageError = useCallback(() => setImageError(true), [])
   const onVideoError = useCallback(() => setVideoError(true), [])
 
-  // reset when image change. Needed when component is recycled
-  useEffect(() => setImageError(false), [image])
-  useEffect(() => setVideoError(false), [image, animation])
+  // Switch to the fallback when there is an error with the main media
+  useEffect(() => {
+    if (!imageError) return
+    if (!videoError) return
+    if (mediaToDisplay?.url === fallback?.url) return
+    setMediaToDisplay(fallback)
+  }, [imageError, videoError, fallback, mediaToDisplay])
+
+  // Reset all errors when the media to display changes (when switching to the fallback)
+  useEffect(() => {
+    setImageError(false)
+    setVideoError(false)
+  }, [mediaToDisplay])
+
+  useEffect(() => setMediaToDisplay(media), [media])
 
   // cannot display anything
-  if (imageError && videoError)
+  if (!mediaToDisplay || (imageError && videoError && mediaToDisplay))
     return (
       <>
         <svg viewBox="0 0 1 1">
@@ -90,30 +55,15 @@ const TokenMedia: FC<{
       </>
     )
 
-  // Hack in case the image fails to load because it is a video
-  if (imageError && !videoError) {
-    return (
-      <Box
-        as="video"
-        src={image}
-        autoPlay
-        playsInline
-        muted
-        loop
-        controls={controls}
-        maxW="full"
-        maxH="full"
-        onError={onVideoError}
-      />
-    )
-  }
-
   // display video
-  if (animation && !videoError) {
+  if (
+    (mediaToDisplay.mimetype?.startsWith('video/') || imageError) &&
+    !videoError
+  ) {
     return (
       <Box
         as="video"
-        src={animation}
+        src={mediaToDisplay.url}
         autoPlay
         playsInline
         muted
@@ -125,28 +75,17 @@ const TokenMedia: FC<{
       />
     )
   }
-
-  // Use a basic image when the file is a blob or data
-  if (image.startsWith('blob:') || image.startsWith('data:'))
-    return (
-      <chakra.img
-        src={image}
-        alt={defaultText}
-        objectFit={fill ? 'cover' : 'scale-down'}
-        sizes={sizes}
-      />
-    )
 
   return (
     <Box position="relative" w="full" h="full">
       <Image
-        src={image}
+        src={mediaToDisplay.url}
         alt={defaultText}
         onError={onImageError}
         fill
         objectFit={fill ? 'cover' : 'contain'}
         sizes={sizes}
-        unoptimized={unlockedContent?.mimetype === 'image/gif'}
+        unoptimized={mediaToDisplay.mimetype === 'image/gif'}
       />
     </Box>
   )

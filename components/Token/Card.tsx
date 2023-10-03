@@ -18,6 +18,7 @@ import { HiOutlineDotsHorizontal } from '@react-icons/all-files/hi/HiOutlineDots
 import Countdown from 'components/Countdown/Countdown'
 import useTranslation from 'next-translate/useTranslation'
 import { FC, useMemo, useState } from 'react'
+import useDetectAssetMedia from '../../hooks/useDetectAssetMedia'
 import useEnvironment from '../../hooks/useEnvironment'
 import Image from '../Image/Image'
 import Link from '../Link/Link'
@@ -98,6 +99,7 @@ const TokenCard: FC<Props> = ({
   const { t } = useTranslation('templates')
   const isOwner = useMemo(() => asset.owned.gt('0'), [asset])
   const [isHovered, setIsHovered] = useState(false)
+  const media = useDetectAssetMedia(asset)
 
   const chainName = useMemo(
     () => CHAINS.find((x) => x.id === asset.collection.chainId)?.name,
@@ -163,11 +165,9 @@ const TokenCard: FC<Props> = ({
     >
       <Flex as={Link} href={`/tokens/${asset.id}`} w="full" position="relative">
         <AspectRatio w="full" ratio={1}>
-          {asset.image ? (
+          {media.media?.url ? (
             <TokenMedia
-              imageUrl={asset.image}
-              animationUrl={asset.animationUrl}
-              unlockedContent={asset.unlockedContent}
+              {...media}
               defaultText={asset.name}
               fill
               sizes="

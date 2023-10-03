@@ -55,6 +55,7 @@ import {
 import { useFetchAssetQuery } from '../../../graphql'
 import useAccount from '../../../hooks/useAccount'
 import useBlockExplorer from '../../../hooks/useBlockExplorer'
+import useDetectAssetMedia from '../../../hooks/useDetectAssetMedia'
 import useEnvironment from '../../../hooks/useEnvironment'
 import useRequiredQueryParamSingle from '../../../hooks/useRequiredQueryParamSingle'
 import useSigner from '../../../hooks/useSigner'
@@ -99,6 +100,11 @@ const DetailPage: NextPage<Props> = ({ now: nowProp }) => {
   })
 
   const asset = data?.asset
+
+  const finalMedia = useDetectAssetMedia(asset)
+  const previewMedia = useDetectAssetMedia(
+    asset && { ...asset, unlockedContent: null },
+  )
 
   const blockExplorer = useBlockExplorer(chainId)
 
@@ -221,11 +227,7 @@ const DetailPage: NextPage<Props> = ({ now: nowProp }) => {
             ) : (
               <>
                 <TokenMedia
-                  imageUrl={asset.image}
-                  animationUrl={asset.animationUrl}
-                  unlockedContent={
-                    showPreview ? undefined : asset.unlockedContent
-                  }
+                  {...(showPreview ? previewMedia : finalMedia)}
                   defaultText={asset.name}
                   controls
                   sizes="
