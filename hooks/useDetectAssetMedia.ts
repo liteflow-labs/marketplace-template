@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-export type FileResult = {
+export type AssetMedia = {
   url: string
   mimetype?: string | null
 } | null
@@ -21,8 +21,8 @@ export default function useDetectAssetMedia(
     | undefined
     | null,
 ): {
-  media: FileResult
-  fallback: FileResult | null
+  media: AssetMedia
+  fallback: AssetMedia | null
 } {
   const media = useMemo(() => {
     if (!asset) {

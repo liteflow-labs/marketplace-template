@@ -1,12 +1,12 @@
 import { Box, Center, Icon, Stack, Text, useTheme } from '@chakra-ui/react'
 import { FaImage } from '@react-icons/all-files/fa/FaImage'
 import { FC, useCallback, useEffect, useState } from 'react'
-import { FileResult } from '../../hooks/useDetectAssetMedia'
+import { AssetMedia } from '../../hooks/useDetectAssetMedia'
 import Image from '../Image/Image'
 
 const TokenMedia: FC<{
-  media: FileResult
-  fallback: FileResult | null
+  media: AssetMedia
+  fallback: AssetMedia | null
   defaultText: string
   controls?: boolean
   fill?: boolean
@@ -16,7 +16,7 @@ const TokenMedia: FC<{
 
   const [imageError, setImageError] = useState(false)
   const [videoError, setVideoError] = useState(false)
-  const [mediaToDisplay, setMediaToDisplay] = useState<FileResult | null>(media)
+  const [mediaToDisplay, setMediaToDisplay] = useState<AssetMedia | null>(media)
 
   const onImageError = useCallback(() => setImageError(true), [])
   const onVideoError = useCallback(() => setVideoError(true), [])
