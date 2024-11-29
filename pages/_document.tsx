@@ -64,6 +64,16 @@ class MyDocument extends Document {
   ): Promise<DocumentInitialProps & MyDocumentProps> {
     invariant(context.req)
     const jwt = context.req?.cookies?.[COOKIE_JWT_TOKEN] || null
+
+    // set cache control header
+    context.res?.setHeader(
+      'Cache-Control',
+      `${
+        // make the cache private if user is logged in
+        jwt ? 'private' : 'public'
+      }, max-age=10, stale-while-revalidate=50`,
+    )
+
     const environment = await getEnvironment()
     // the `getClient` needs to be reset on every request as early as possible and before any rendering
     const apolloClient = getClient(
